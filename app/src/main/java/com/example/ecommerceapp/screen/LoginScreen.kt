@@ -37,12 +37,10 @@ fun LoginScreen(modifier: Modifier= Modifier){
     var password by remember {
         mutableStateOf("")
     }
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp)
+            .padding(top = 40.dp)
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
