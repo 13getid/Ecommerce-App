@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ecommerceapp.screen.AuthScreen
+import com.example.ecommerceapp.screen.HomeScreen
 import com.example.ecommerceapp.screen.LoginScreen
 import com.example.ecommerceapp.screen.SignupScreen
 
@@ -21,7 +22,11 @@ fun AppNavigation(modifier: Modifier = Modifier){
             LoginScreen(modifier)
         }
         composable("signup"){
-            SignupScreen(modifier)
+            SignupScreen(modifier,navController)
+        }
+
+        composable("homeScreen"){
+            HomeScreen(modifier)
         }
     }
 
