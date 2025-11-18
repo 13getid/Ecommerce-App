@@ -117,7 +117,7 @@ fun LoginScreen(modifier: Modifier= Modifier, navController: NavController, auth
                 authViewModel.login(email,password){success,errorMessage ->
                     if (success){
                         isLoading = false
-                        navController.navigate("HomeScreen"){
+                        navController.navigate("home"){
                             popUpTo("auth"){inclusive = true}
                         }
 
