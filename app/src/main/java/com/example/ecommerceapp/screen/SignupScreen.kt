@@ -135,7 +135,7 @@ fun SignupScreen(modifier: Modifier= Modifier,navController: NavController,authV
                authViewModel.signup(email,name,password){success,errorMessage ->
                    if (success){
                        isLoading = false
-                       navController.navigate("HomeScreen"){
+                       navController.navigate("home"){
                            popUpTo("auth"){inclusive = true}
                        }
 
