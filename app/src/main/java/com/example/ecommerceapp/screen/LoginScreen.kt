@@ -17,18 +17,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.ecommerceapp.AppUtil
 import com.example.ecommerceapp.R
+import com.example.ecommerceapp.viewModel.AuthViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier= Modifier){
+fun LoginScreen(modifier: Modifier= Modifier, navController: NavController, authViewModel:AuthViewModel = viewModel()){
 
     var email by remember {
         mutableStateOf("")
@@ -37,6 +41,13 @@ fun LoginScreen(modifier: Modifier= Modifier){
     var password by remember {
         mutableStateOf("")
     }
+
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+
+    val  context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -101,12 +112,28 @@ fun LoginScreen(modifier: Modifier= Modifier){
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { },
+            onClick = {
+                isLoading = true
+                authViewModel.login(email,password){success,errorMessage ->
+                    if (success){
+                        isLoading = false
+                        navController.navigate("HomeScreen"){
+                            popUpTo("auth"){inclusive = true}
+                        }
+
+                    }else{
+                        isLoading = false
+                        AppUtil.showToast(context,errorMessage?:"Something went wrong")
+
+                    }
+                }
+            },
+            enabled =!isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
         ) {
-            Text(text = "Login", fontSize = 22.sp)
+            Text(text = if (isLoading) "loggedIn" else "Login", fontSize = 22.sp)
         }
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = "Don't have account?Signup",
