@@ -1,8 +1,15 @@
 package com.example.ecommerceapp.components
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,11 +17,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 
 @Composable
 fun  HeaderView(modifier:Modifier = Modifier){
@@ -24,41 +37,46 @@ fun  HeaderView(modifier:Modifier = Modifier){
     }
 
     LaunchedEffect(Unit) {
-        val user = FirebaseAuth.getInstance().currentUser
-        // if no user is logged in,stop the code
-        if (user == null){
-            Log.e("Signup","user not logged in")
+        val  user = FirebaseAuth.getInstance().currentUser ?:run {
+            Log.e("Signup","User not logged in")
+            name = "Guest"
             return@LaunchedEffect
         }
-        Firebase.firestore.collection("users")
-            .document(user.uid)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful){
-                    val doc = task.result
+        try {
+            val snapshot = Firebase.firestore.collection("users")
+                .document(user.uid)
+                .get()
+                .await()// This waits for the result
 
-                    if (doc!= null&& doc.exists()){
-                        val fullName = doc.getString("email")?:" "
+            name = snapshot.getString("name")
+                ?.takeIf { it.isNotBlank() }
+                ?.split(" ")
+                ?.firstOrNull()
+                ?:"Friend"
+        }catch (e: Exception){
+            Log.e("FireStore","Error loading user name:&{e.message}")
+            name = "Friend"
+        }
 
-                        //safely extract first name
-                        val firstName = fullName.split(" ")
-                            .firstOrNull()
-                            ?.trim()
-                            ?:" "
-
-                        name = firstName
-                    }else{
-                        Log.e("FireStore","Document does not exist")
-                    }
-                }else{
-                    Log.e("FireStore","Error: ${task.exception?.message}")
-                }
-            }
     }
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .padding(top = 50.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Column{
+            Text(text = "Welcome Back")
+            Text(text = name, style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            ))
+        }
+        IconButton(onClick = { /*TODO*/ }) {
+            Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+        }
 
-    Column (modifier = Modifier.padding(top = 50.dp)){
-        Text(text = "Welcome Back")
-        Text(text = name)
-    }
+
+}
 
 }

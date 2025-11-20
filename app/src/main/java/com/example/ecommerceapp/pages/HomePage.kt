@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.ecommerceapp.components.BannerView
 import com.example.ecommerceapp.components.HeaderView
 
 @Composable
@@ -16,6 +17,7 @@ fun  HomePage(modifier: Modifier){
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        HeaderView()
+        HeaderView(modifier)
+        BannerView(modifier)
     }
 }
