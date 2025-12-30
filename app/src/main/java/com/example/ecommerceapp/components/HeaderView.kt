@@ -21,62 +21,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.tasks.await
-import java.lang.Exception
+
 
 @Composable
-fun  HeaderView(modifier:Modifier = Modifier){
+fun HeaderView(modifier: Modifier= Modifier){
 
-    var  name by remember {
+    var name by remember {
         mutableStateOf("")
     }
 
     LaunchedEffect(Unit) {
-        val  user = FirebaseAuth.getInstance().currentUser ?:run {
-            Log.e("Signup","User not logged in")
-            name = "Guest"
-            return@LaunchedEffect
-        }
-        try {
-            val snapshot = Firebase.firestore.collection("users")
-                .document(user.uid)
-                .get()
-                .await()// This waits for the result
-
-            name = snapshot.getString("name")
-                ?.takeIf { it.isNotBlank() }
-                ?.split(" ")
-                ?.firstOrNull()
-                ?:"Friend"
-        }catch (e: Exception){
-            Log.e("FireStore","Error loading user name:&{e.message}")
-            name = "Friend"
-        }
-
+        Firebase.firestore.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+            .get().addOnCompleteListener (){
+                name = it.result.get("name").toString().split(" ")[0]
+            }
     }
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(top = 50.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Column{
-            Text(text = "Welcome Back")
+    ) {
+        Column {
+            Text(text = "Welcome back")
             Text(text = name, style = TextStyle(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             ))
         }
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = {/*TODO*/}) {
             Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
         }
+    }
 
-
-}
 
 }
