@@ -21,11 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.ecommerceapp.R
 
 @Composable
-fun AuthScreen(modifier: Modifier = Modifier, navController: NavHostController){
+fun AuthScreen(modifier: Modifier = Modifier, navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()
