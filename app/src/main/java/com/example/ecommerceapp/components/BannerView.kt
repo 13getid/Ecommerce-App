@@ -24,18 +24,15 @@ fun BannerView(modifier: Modifier = Modifier){
                     val  doc = task.result
                     if (doc != null && doc.exists()){
                         val urls = doc.get("urls")
-                        if (urls is List<*>){
+                        if (urls is List<*>) {
                             bannerList = urls.filterIsInstance<String>()
-                        }else{
-                            println("urls is not a list")
                         }
-                    }else{
-                        println("Document does not exist")
                     }
-                }else{
-                    println("Error: ${task.exception?.message}")
                 }
             }
     }
-    }
 
+    if (bannerList.isNotEmpty()){
+        ImageSlider(modifier = modifier, imageList = bannerList)
+    }
+}
