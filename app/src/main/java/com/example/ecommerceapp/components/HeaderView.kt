@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -31,16 +30,32 @@ import com.google.firebase.firestore.firestore
 fun HeaderView(modifier: Modifier= Modifier){
 
     var name by remember {
-        mutableStateOf("")
+        mutableStateOf("Guest")// Default name if no user is logged in
     }
 
     LaunchedEffect(Unit) {
+        //check if  user is logged in first
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {   // only get data if user exists
         Firebase.firestore.collection("users")
-            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-            .get().addOnCompleteListener (){
-                name = it.result.get("name").toString().split(" ")[0]
+            .document(currentUser.uid)// Safe! No !! needed
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful){ // check if task is successful
+                    val userName = task.result?.get("name")?.toString()
+                    if (userName != null){
+                name = userName.split(" ")[0]
             }
+    }else{
+        Log.e("HeaderView", "Error getting user data: ${task.exception?.message}")
+
     }
+    }
+}else{
+    Log.e("HeaderView", "No user logged in")
+            name = "Guest"  // Set name to "Guest" if no user is logged in
+        }
+                }
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

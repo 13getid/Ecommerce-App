@@ -25,29 +25,29 @@ import com.example.ecommerceapp.pages.HomePage
 import com.example.ecommerceapp.pages.ProfilePage
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier,navController: NavController){
+fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
 
     val navItemList = listOf(
-        NavItem("Home",Icons.Default.Home),
-        NavItem("Favorite",Icons.Default.Favorite),
-        NavItem("Cart",Icons.Default.ShoppingCart),
-        NavItem("Profile",Icons.Default.Person)
+        NavItem("Home", Icons.Default.Home),
+        NavItem("Favorite", Icons.Default.Favorite),
+        NavItem("Cart", Icons.Default.ShoppingCart),
+        NavItem("Profile", Icons.Default.Person)
     )
 
-    var selectedIndex by remember{
+    var selectedIndex by remember {
         mutableStateOf(0)
     }
 
     Scaffold(
         bottomBar = {
-            NavigationBar{
+            NavigationBar {
                 navItemList.forEachIndexed { index, navItem ->
                     NavigationBarItem(
                         selected = index == selectedIndex,
                         onClick = {
                             selectedIndex = index
                         },
-                        icon ={
+                        icon = {
                             Icon(imageVector = navItem.icon, contentDescription = navItem.label)
                         },
                         label = {
@@ -60,22 +60,22 @@ fun HomeScreen(modifier: Modifier = Modifier,navController: NavController){
             }
         }
     ) {
-        ContentScreen(modifier = Modifier.padding(it),selectedIndex)
+        ContentScreen(modifier = Modifier.padding(it), selectedIndex)
     }
 }
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier,selectedIndex: Int){
-when(selectedIndex){
-    0-> HomePage(modifier)
-    1-> FavoritePage(modifier)
-    2-> CartPage(modifier)
-    3-> ProfilePage(modifier)
-}
+fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int) {
+    when (selectedIndex) {
+        0 -> HomePage(modifier)
+        1 -> FavoritePage(modifier)
+        2 -> CartPage(modifier)
+        3 -> ProfilePage(modifier)
+    }
 }
 
-data class  NavItem(
+data class NavItem(
     val label: String,
-    val icon : ImageVector
+    val icon: ImageVector
 
 )
