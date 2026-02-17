@@ -35,7 +35,7 @@ fun BannerView(modifier: Modifier = Modifier) {
     }
     LaunchedEffect(Unit) {
         Firebase.firestore.collection("data")
-            .document("banners")
+            .document("banner")
             .get()
             .addOnCompleteListener { task ->
                 isLoading = false // always stop loading when done
