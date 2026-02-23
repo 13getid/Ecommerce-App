@@ -19,29 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
-@Composable
-fun BannerView(modifier: Modifier = Modifier) {
-    //state 1.The list of image urls
-    var bannerList by remember {
-        mutableStateOf<List<String>>(emptyList())
-    }
-    //state 2. Are we still loading
-    var isLoading by remember {
-        mutableStateOf(true)
-    }
-    //staten 3. Error message
-    var hasError by remember {
-        mutableStateOf(false)
-    }
-    LaunchedEffect(Unit) {
-        Firebase.firestore.collection("data")
-            .document("banners")
-            .get()
-            .addOnCompleteListener { task ->
-                isLoading = false // always stop loading when done
-
-                if (task.isSuccessful) {
-
                     val doc = task.result
                     if (doc != null && doc.exists()) {
                         val urls = doc.get("urls")
