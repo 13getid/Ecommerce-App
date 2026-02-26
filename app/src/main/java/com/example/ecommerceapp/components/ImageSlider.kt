@@ -25,7 +25,7 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageSlider(modifier: Modifier = Modifier, imageList: List<String>) {
+fun ImageSlider(imageList: List<String>,modifier: Modifier = Modifier) {
     //Safety check - don't crash if list is empty!
     if (imageList.isEmpty())return
 
@@ -37,7 +37,7 @@ fun ImageSlider(modifier: Modifier = Modifier, imageList: List<String>) {
         while (true) {
             delay(3000)
             val nextPage = (pagerState.currentPage + 1) % imageList.size
-            pagerState.scrollToPage(nextPage) //smooth animation
+            pagerState.animateScrollToPage(nextPage) //smooth slide animation
         }
     }
 
@@ -49,29 +49,29 @@ fun ImageSlider(modifier: Modifier = Modifier, imageList: List<String>) {
         HorizontalPager(
             count = imageList.size,
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = Modifier
-                .height(200.dp)
+                .height(240.dp)
                 .fillMaxWidth()
         ) { page ->
-            val imageUrl = imageList[page]
-            AsyncImage(model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                .data(imageList[page])
+                .crossfade(true)  // enable smooth fade-in
                 .build(),
-                contentDescription = "",
+                contentDescription = "Banner ${page + 1}",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.Crop
+                    .height(240.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Crop  // fills the space perfectly
             )
         }
         //Dots showing the current slide
         HorizontalPagerIndicator(
             pagerState = pagerState,
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(12.dp),
             activeColor = Color.Black,
-            inactiveColor = Color.LightGray
+            inactiveColor = Color.Gray.copy(alpha = 0.5f) // More subtle inactive dots
         )
 
     }

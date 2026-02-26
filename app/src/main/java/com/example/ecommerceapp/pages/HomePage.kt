@@ -1,7 +1,9 @@
 package com.example.ecommerceapp.pages
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +19,7 @@ fun  HomePage(modifier: Modifier){
             .padding(64.dp)
     ) {
         HeaderView(modifier)
-        BannerView(modifier)
+        Spacer(modifier = Modifier.height(10.dp))
+        BannerView(modifier = Modifier.height(200.dp))
     }
 }

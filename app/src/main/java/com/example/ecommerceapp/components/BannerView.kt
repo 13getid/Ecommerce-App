@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -61,8 +62,7 @@ fun BannerView(modifier: Modifier = Modifier) {
     }
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         when {
