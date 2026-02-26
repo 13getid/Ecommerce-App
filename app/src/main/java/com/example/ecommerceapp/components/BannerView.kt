@@ -62,7 +62,8 @@ fun BannerView(modifier: Modifier = Modifier) {
     }
     Box(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .height(120.dp),
         contentAlignment = Alignment.Center
     ) {
         when {
