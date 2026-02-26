@@ -16,6 +16,7 @@ local.properties
 
 #Google Services confiquration
 google-services.json
+google-services .json
 
 #Environment files
 .env
