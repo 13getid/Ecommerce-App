@@ -69,7 +69,7 @@ fun ImageSlider(imageList: List<String>,modifier: Modifier = Modifier) {
         //Dots showing the current slide
         HorizontalPagerIndicator(
             pagerState = pagerState,
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(16.dp),
             activeColor = Color.Black,
             inactiveColor = Color.Gray.copy(alpha = 0.5f) // More subtle inactive dots
         )
