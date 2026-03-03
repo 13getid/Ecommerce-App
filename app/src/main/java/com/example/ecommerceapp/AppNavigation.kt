@@ -8,9 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerceapp.pages.CategoryProductPage
 import com.example.ecommerceapp.screen.AuthScreen
 import com.example.ecommerceapp.screen.HomeScreen
 import com.example.ecommerceapp.screen.LoginScreen
@@ -21,6 +24,7 @@ import com.google.firebase.auth.auth
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
+    GlobalNavigation.navController = navController
 
     // 1. Use a State variable to hold the start destination safely
     var startDestination by remember { mutableStateOf("loading") }
@@ -49,9 +53,21 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             composable("home") {
                 HomeScreen(modifier, navController)
             }
+
+            composable("category-products/{categoryId}") {
+                var categoryId : it.arguments?.getString("categoryId")
+                CategoryProductPage(modifier,categoryId?: "")
+            }
+
         }
     } else {
         // Optional: Show a loading screen while auth state is checked
         // Text("Loading...")
     }
 }
+
+object GlobalNavigation{
+    lateinit var navController: NavHostController
+
+}
+

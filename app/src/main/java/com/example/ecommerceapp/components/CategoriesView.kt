@@ -33,7 +33,10 @@ import com.google.firebase.firestore.firestore
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.ui.text.font.FontWeight
+import com.example.ecommerceapp.GlobalNavigation
 
 @Composable
 fun CategoriesView (modifier: Modifier = Modifier){
@@ -108,21 +111,25 @@ fun CategoryItem(
             .padding(vertical = 8.dp)
     ) {
         Card(
-            modifier = Modifier.size(70.dp),
-            shape = CircleShape,
+            modifier = Modifier.size(80.dp)
+                .clickable{
+                   GlobalNavigation.navController.navigate("category-products/"+category.id)
+                },
+            shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(2.dp)
         ) {
             AsyncImage(
                 model = category.imageUrl,
                 contentDescription = category.name,
-                modifier = Modifier.size(70.dp),
+                modifier = Modifier.size(100.dp),
                 contentScale = ContentScale.Crop
             )
         }
 
         Text(
             text = category.name,
-            fontSize = 12.sp,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
