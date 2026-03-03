@@ -47,6 +47,8 @@ fun CategoriesView (modifier: Modifier = Modifier){
     LaunchedEffect(Unit) {
         Log.d("CATEGORY","Fetching categories")
         Firebase.firestore
+            .collection("data")
+            .document("stock")
             .collection("categories")
             .get()
             .addOnSuccessListener { querySnapshot ->
