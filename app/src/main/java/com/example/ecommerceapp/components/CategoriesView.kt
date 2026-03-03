@@ -30,6 +30,10 @@ import coil.compose.AsyncImage
 import com.example.ecommerceapp.model.CategoryModel
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 
 @Composable
 fun CategoriesView (modifier: Modifier = Modifier){
@@ -38,14 +42,15 @@ fun CategoriesView (modifier: Modifier = Modifier){
         mutableStateOf<List<CategoryModel>>(emptyList())
     }
 
-    val isLoading = remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
+        Log.d("CATEGORY","Fetching categories")
         Firebase.firestore
             .collection("categories")
             .get()
-            .addOnCompleteListener { snapshot ->
-                categoryList.value = snapshot.documents.mapNotNull{ doc ->
+            .addOnSuccessListener { querySnapshot ->
+                categoryList = querySnapshot.documents.mapNotNull{ doc ->
                     try {
                         CategoryModel(
                             id = doc.id,
@@ -53,19 +58,19 @@ fun CategoriesView (modifier: Modifier = Modifier){
                             imageUrl = doc.getString("imageUrl") ?:""
                         )
                     }catch (e: Exception){
-                        Log.e("CATEGORY","Error: ${e.message}")
+                        Log.e("CATEGORY", "Error parsing doc: ${e.message}")
                         null
                     }
                 }
-                isLoading.value = false
-                Log.d("CATEGORY","Loaded ${categoryList.value.size}categories")
+                isLoading = false
+                Log.d("CATEGORY","Loaded ${categoryList.size}categories")
             }
             .addOnFailureListener { e ->
-                Log.e("CATEGORY", "Error: ${e.message})
-                        isLoading.value = false
+                Log.e("CATEGORY", "❌ Error: ${e.message}")
+                        isLoading = false
             }
     }
-    if (isLoading.value){
+    if (isLoading){
         Box(
             modifier = modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -78,8 +83,8 @@ fun CategoriesView (modifier: Modifier = Modifier){
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(categoryList.value){ category ->
-                categoryItem(
+            items(categoryList){ category ->
+                CategoryItem(
                     category = category,
                     onClick ={
                         Log.d("CATEGORY","Clicked: ${category.name}")
@@ -90,7 +95,7 @@ fun CategoriesView (modifier: Modifier = Modifier){
     }
 }
 @Composable
-fun categoryItem(
+fun CategoryItem(
     category: CategoryModel,
     onClick:() -> Unit ={}
 ){
