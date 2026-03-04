@@ -6,5 +6,5 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun CategoryProductPage(modifier: Modifier = Modifier,categoryId : String){
-    Text(text = "Category product page")
+    Text(text = "Category product page ::::::$categoryId")
 }

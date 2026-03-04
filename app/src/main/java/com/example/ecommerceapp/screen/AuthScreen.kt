@@ -22,10 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.ecommerceapp.R
 
 @Composable
-fun AuthScreen(modifier: Modifier = Modifier, navController: NavController){
+fun AuthScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController){
     Column(
         modifier = Modifier
             .fillMaxSize()

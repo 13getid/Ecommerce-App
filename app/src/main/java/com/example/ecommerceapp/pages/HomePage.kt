@@ -5,27 +5,35 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.ecommerceapp.components.BannerView
 import com.example.ecommerceapp.components.CategoriesView
 import com.example.ecommerceapp.components.HeaderView
 
 @Composable
-fun  HomePage(modifier: Modifier){
+fun  HomePage(
+    modifier: Modifier,
+    navController: NavHostController
+){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(64.dp)
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
     ) {
         HeaderView(modifier)
         Spacer(modifier = Modifier.height(10.dp))
         BannerView(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Text( "Categories",
             modifier = Modifier
                 .padding(12.dp),
@@ -34,7 +42,13 @@ fun  HomePage(modifier: Modifier){
                 fontWeight = FontWeight.Bold
             )
             )
-        CategoriesView(modifier = Modifier)
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CategoriesView(
+            modifier = Modifier,
+            navController = navController
+            )
 
     }
 }

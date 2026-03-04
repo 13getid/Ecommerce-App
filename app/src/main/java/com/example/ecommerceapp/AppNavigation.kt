@@ -24,7 +24,6 @@ import com.google.firebase.auth.auth
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    GlobalNavigation.navController = navController
 
     // 1. Use a State variable to hold the start destination safely
     var startDestination by remember { mutableStateOf("loading") }
@@ -54,20 +53,14 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 HomeScreen(modifier, navController)
             }
 
-            composable("category-products/{categoryId}") {
-                var categoryId : it.arguments?.getString("categoryId")
+            composable("category-products/{categoryId}") { backStackEntry->
+                val categoryId =backStackEntry.arguments?.getString("categoryId")
                 CategoryProductPage(modifier,categoryId?: "")
             }
 
         }
-    } else {
-        // Optional: Show a loading screen while auth state is checked
-        // Text("Loading...")
     }
-}
-
-object GlobalNavigation{
-    lateinit var navController: NavHostController
 
 }
+
 

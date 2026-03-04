@@ -13,19 +13,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.ecommerceapp.pages.CartPage
 import com.example.ecommerceapp.pages.FavoritePage
 import com.example.ecommerceapp.pages.HomePage
 import com.example.ecommerceapp.pages.ProfilePage
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController) {
 
     val navItemList = listOf(
         NavItem("Home", Icons.Default.Home),
@@ -35,10 +37,11 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
     )
 
     var selectedIndex by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
     Scaffold(
+        modifier = modifier,
         bottomBar = {
             NavigationBar {
                 navItemList.forEachIndexed { index, navItem ->
@@ -59,15 +62,23 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
 
             }
         }
-    ) {
-        ContentScreen(modifier = Modifier.padding(it), selectedIndex)
+    ) { paddingValues ->
+        ContentScreen(
+            modifier = Modifier.padding(paddingValues),
+            selectedIndex = selectedIndex,
+            navController = navController
+        )
     }
 }
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int) {
+fun ContentScreen(
+    modifier: Modifier = Modifier,
+    selectedIndex: Int,
+    navController: NavHostController
+    ) {
     when (selectedIndex) {
-        0 -> HomePage(modifier)
+        0 -> HomePage(modifier, navController )
         1 -> FavoritePage(modifier)
         2 -> CartPage(modifier)
         3 -> ProfilePage(modifier)

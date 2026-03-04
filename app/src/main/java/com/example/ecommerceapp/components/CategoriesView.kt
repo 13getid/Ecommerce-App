@@ -36,10 +36,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.ui.text.font.FontWeight
-import com.example.ecommerceapp.GlobalNavigation
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 @Composable
-fun CategoriesView (modifier: Modifier = Modifier){
+fun CategoriesView (modifier: Modifier = Modifier,
+                    navController: NavHostController
+){
 
     var categoryList by remember {
         mutableStateOf<List<CategoryModel>>(emptyList())
@@ -92,7 +95,8 @@ fun CategoriesView (modifier: Modifier = Modifier){
                 CategoryItem(
                     category = category,
                     onClick ={
-                        Log.d("CATEGORY","Clicked: ${category.name}")
+                        Log.d("CATEGORY", "Clicked: ${category.name}")
+                        navController.navigate("category-products/${category.id}")
                     }
                 )
         }
@@ -111,17 +115,14 @@ fun CategoryItem(
             .padding(vertical = 8.dp)
     ) {
         Card(
-            modifier = Modifier.size(80.dp)
-                .clickable{
-                   GlobalNavigation.navController.navigate("category-products/"+category.id)
-                },
+            modifier = Modifier.size(80.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(2.dp)
         ) {
             AsyncImage(
                 model = category.imageUrl,
                 contentDescription = category.name,
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier.size(80.dp),
                 contentScale = ContentScale.Crop
             )
         }
