@@ -1,36 +1,40 @@
 package com.example.ecommerceapp.components
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageSlider(imageList: List<String>,modifier: Modifier = Modifier) {
+fun ImageSlider(imageList: List<String>,
+                modifier: Modifier = Modifier
+) {
     //Safety check - don't crash if list is empty!
     if (imageList.isEmpty())return
 
     val  pagerState = rememberPagerState(
-        initialPage = 0
+        initialPage = 0,
+        pageCount ={imageList.size}
     )
     //auto scroll every 3 seconds
     LaunchedEffect(Unit) {
@@ -47,7 +51,6 @@ fun ImageSlider(imageList: List<String>,modifier: Modifier = Modifier) {
     ) {
         //the sliding images
         HorizontalPager(
-            count = imageList.size,
             state = pagerState,
             modifier = Modifier
                 .height(240.dp)
@@ -67,12 +70,46 @@ fun ImageSlider(imageList: List<String>,modifier: Modifier = Modifier) {
             )
         }
         //Dots showing the current slide
-        HorizontalPagerIndicator(
-            pagerState = pagerState,
-            modifier = Modifier.padding(16.dp),
-            activeColor = Color.Black,
-            inactiveColor = Color.Gray.copy(alpha = 0.5f) // More subtle inactive dots
+        PagerIndicator(
+            pageCount = imageList.size,
+            currentPage = pagerState.currentPage,
+            modifier = Modifier.padding(16.dp)
         )
 
+    }
+}
+@Composable
+fun PagerIndicator(
+    pageCount: Int,
+    currentPage: Int,
+    modifier: Modifier = Modifier
+){
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center
+    ){
+        repeat(pageCount){index ->
+            val isSelected = currentPage ==index
+            Canvas(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .height(8.dp)
+                    .then(
+                        if (isSelected) Modifier.width(24.dp)
+                        else Modifier.width(8.dp)
+                    )
+            ) {
+                drawRoundRect(
+                    color = if (isSelected)
+                    Color.Black
+                    else
+                    Color.Gray.copy(alpha = 0.5f),
+                    cornerRadius = CornerRadius(
+                        size.height / 2,
+                        size.height / 2
+                    )
+                )
+            }
+        }
     }
 }
