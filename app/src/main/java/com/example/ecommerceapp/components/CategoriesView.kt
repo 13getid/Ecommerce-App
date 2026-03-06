@@ -40,9 +40,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 
 @Composable
-fun CategoriesView (modifier: Modifier = Modifier,
-                    navController: NavHostController
-){
+fun CategoriesView (modifier: Modifier = Modifier, navController: NavHostController){
 
     var categoryList by remember {
         mutableStateOf<List<CategoryModel>>(emptyList())
