@@ -7,5 +7,6 @@ data class ProductModel(
     val price: Double = 0.0,
     val actualPrice: Double = 0.0,
     val category: String? = "",
+    val categoryId: String? = "",
     val images: String = ""
 )

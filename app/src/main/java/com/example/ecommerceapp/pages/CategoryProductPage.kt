@@ -49,7 +49,7 @@ fun CategoryProductPage(modifier: Modifier = Modifier, categoryId: String) {
             .collection("data")
             .document("stock")
             .collection("products")
-            .whereEqualTo("category", categoryId)
+            .whereEqualTo("categoryId", categoryId)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 productList = querySnapshot.documents.mapNotNull { doc ->
@@ -61,6 +61,7 @@ fun CategoryProductPage(modifier: Modifier = Modifier, categoryId: String) {
                             price = doc.getDouble("price") ?: 0.0,
                             images = doc.getString("images") ?: "",
                             category = doc.getString("category"),
+                            categoryId = doc.getString("category"),
                             description = doc.getString("description") ?: ""
                         )
                     } catch (e: Exception) {
